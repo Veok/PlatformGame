@@ -16,6 +16,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
     private void Start()
     {
         _isFacingRight = true;
+        rigidbody2D.freezeRotation = true;
     }
 
     // Update is called once per frame
