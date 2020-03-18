@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerControllerLevel1 : MonoBehaviour
 {
@@ -8,6 +10,8 @@ public class PlayerControllerLevel1 : MonoBehaviour
     public LayerMask groundLayer;
     public Animator animator;
     public int score;
+    public Text youWinText;
+    public GameObject youWinPanel;
 
     private bool _isWalking;
     private bool _isFacingRight;
@@ -17,6 +21,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
     {
         _isFacingRight = true;
         rigidbody2D.freezeRotation = true;
+        youWinPanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -49,6 +54,11 @@ public class PlayerControllerLevel1 : MonoBehaviour
 
             transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
             _isWalking = true;
+        }
+
+        if (Math.Abs(transform.position.x - 48.1) < 0.1 && Math.Abs(transform.position.y - (-8.0)) < 0.01)
+        {
+            YouWin();
         }
 
         animator.SetBool("isGrounded", IsGrounded());
@@ -90,5 +100,10 @@ public class PlayerControllerLevel1 : MonoBehaviour
     private bool IsGrounded()
     {
         return Physics2D.Raycast(transform.position, Vector2.down, 0.5f, groundLayer.value);
+    }
+
+    private void YouWin()
+    {
+        youWinPanel.SetActive(true);
     }
 }
