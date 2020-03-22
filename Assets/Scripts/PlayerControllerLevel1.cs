@@ -15,6 +15,9 @@ public class PlayerControllerLevel1 : MonoBehaviour
 
     private bool _isWalking;
     private bool _isFacingRight;
+    private float _killOffset = 0.2f;
+    private Vector2 _startPosition;
+    private int _lives = 3;
 
     // Start is called before the first frame update
     private void Start()
@@ -69,6 +72,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         Debug.Log("jumping");
+        _startPosition = transform.position;
     }
 
     private void Flip()
@@ -86,6 +90,24 @@ public class PlayerControllerLevel1 : MonoBehaviour
             score += 1;
             Debug.Log($"Score {score}");
             other.gameObject.SetActive(false);
+        }
+
+        if (other.CompareTag("Enemy"))
+        {
+            if (other.gameObject.transform.position.y + _killOffset < transform.position.y)
+            {
+                score += 10;
+                Debug.Log($"Enemy killed. Score: {score}");
+            }
+            else
+            {
+                _lives--;
+                if (_lives == 0)
+                {
+                    Debug.Log("GameOver");
+                    transform.position = _startPosition;
+                }
+            }
         }
     }
 
