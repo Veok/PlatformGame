@@ -15,16 +15,18 @@ public class EnemyController : MonoBehaviour
     public float XMax = 5.5f;
     public Animator animator;
     private float _killOffset = 0.2f;
+    private SpriteRenderer mySpriteRenderer;
 
     // Start is called before the first frame update
     void Start()
     {
     }
-    
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _startPositionX = transform.position.x;
+        mySpriteRenderer = GetComponent<SpriteRenderer>();
     }
 
 
@@ -36,12 +38,13 @@ public class EnemyController : MonoBehaviour
             if (transform.position.x < _startPositionX + XMax)
             {
                 MoveRight();
+                mySpriteRenderer.flipX = false;
             }
             else
             {
                 _isMovingRight = false;
                 MoveLeft();
-                Flip();
+                mySpriteRenderer.flipX = true;
             }
         }
         else
@@ -49,19 +52,20 @@ public class EnemyController : MonoBehaviour
             if (transform.position.x > _startPositionX - XMin)
             {
                 MoveLeft();
+                mySpriteRenderer.flipX = true;
             }
             else
             {
                 _isMovingRight = true;
                 MoveRight();
-                Flip();
+                mySpriteRenderer.flipX = false;
             }
         }
     }
 
     private void MoveLeft()
     {
-        if (_rigidbody.velocity.x > -moveSpeed)
+        if (_rigidbody.velocity.x > moveSpeed)
         {
             _rigidbody.velocity = new Vector2(-moveSpeed, _rigidbody.velocity.y);
             _rigidbody.AddForce(Vector2.left * 0.6F, ForceMode2D.Impulse);
@@ -70,7 +74,7 @@ public class EnemyController : MonoBehaviour
 
     private void MoveRight()
     {
-        if (_rigidbody.velocity.x > moveSpeed)
+        if (_rigidbody.velocity.x < moveSpeed)
         {
             _rigidbody.velocity = new Vector2(moveSpeed, _rigidbody.velocity.y);
             _rigidbody.AddForce(Vector2.right * 0.6F, ForceMode2D.Impulse);
@@ -84,8 +88,8 @@ public class EnemyController : MonoBehaviour
             if (other.gameObject.transform.position.y > transform.position.y + _killOffset)
             {
                 Debug.Log("Enemy is dead");
-                StartCoroutine(KillOnAnimationEnd());
                 animator.SetBool("isDead", true);
+                StartCoroutine(KillOnAnimationEnd());
             }
         }
     }
@@ -94,13 +98,5 @@ public class EnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.7f);
         gameObject.SetActive(false);
-    }
-
-    private void Flip()
-    {
-        _isFacingRight = !_isFacingRight;
-        var theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
     }
 }
