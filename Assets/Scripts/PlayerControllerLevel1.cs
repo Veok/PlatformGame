@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class PlayerControllerLevel1 : MonoBehaviour
 {
     public float moveSpeed = 2.5f;
-    public float jumpForce = 1.5f;
+    public float jumpForce = 1.8f;
     public new Rigidbody2D rigidbody2D;
     public LayerMask groundLayer;
     public Animator animator;
@@ -121,7 +121,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
 
     private bool IsGrounded()
     {
-        return Physics2D.Raycast(transform.position, Vector2.down, 0.5f, groundLayer.value);
+        return Physics2D.Raycast(transform.position, Vector2.down, 0.8f, groundLayer.value);
     }
 
     private void YouWin()
