@@ -59,7 +59,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
             _isWalking = true;
         }
 
-        if (Math.Abs(transform.position.x - 48.1) < 0.1 && Math.Abs(transform.position.y - (-8.0)) < 0.01)
+        if (Math.Abs(transform.position.x - 58.56) < 0.1 && Math.Abs(transform.position.y - (-12.11)) < 0.01)
         {
             YouWin();
         }
