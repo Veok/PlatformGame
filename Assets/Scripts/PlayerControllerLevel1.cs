@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,14 +11,15 @@ public class PlayerControllerLevel1 : MonoBehaviour
     public LayerMask groundLayer;
     public Animator animator;
     public int score;
-    public Text youWinText;
     public GameObject youWinPanel;
+    public GameObject keyPanel;
 
     private bool _isWalking;
     private bool _isFacingRight;
     private float _killOffset = 0.2f;
     private Vector2 _startPosition;
     private int _lives = 3;
+    private bool _foundKey;
 
     // Start is called before the first frame update
     private void Start()
@@ -25,47 +27,62 @@ public class PlayerControllerLevel1 : MonoBehaviour
         _isFacingRight = true;
         rigidbody2D.freezeRotation = true;
         youWinPanel.SetActive(false);
+        keyPanel.SetActive(false);
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Space) || Input.GetMouseButtonDown(0))
+        if (GameManager.instance.currentGameState == GameState.GS_GAME)
         {
-            Jump();
-        }
-
-        _isWalking = false;
-
-        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
-        {
-            if (!_isFacingRight)
+            if (Input.GetKey(KeyCode.Space) || Input.GetMouseButtonDown(0))
             {
-                Flip();
+                Jump();
             }
 
-            transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-            _isWalking = true;
-        }
+            _isWalking = false;
 
-        if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
-        {
-            if (_isFacingRight)
+            if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
             {
-                Flip();
+                if (!_isFacingRight)
+                {
+                    Flip();
+                }
+
+                transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                _isWalking = true;
             }
 
-            transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
-            _isWalking = true;
-        }
+            if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+            {
+                if (_isFacingRight)
+                {
+                    Flip();
+                }
 
-        if (Math.Abs(transform.position.x - 58.56) < 0.1 && Math.Abs(transform.position.y - (-12.11)) < 0.01)
-        {
-            YouWin();
-        }
+                transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+                _isWalking = true;
+            }
 
-        animator.SetBool("isGrounded", IsGrounded());
-        animator.SetBool("isWalking", _isWalking);
+            if (FoundChest() && _foundKey)
+            {
+                YouWin();
+            }
+
+            if (FoundChest() && !_foundKey)
+            {
+                KeyNotFoundPanel();
+            }
+
+            animator.SetBool("isGrounded", IsGrounded());
+            animator.SetBool("isWalking", _isWalking);
+        }
+    }
+
+
+    private bool FoundChest()
+    {
+        return Math.Abs(transform.position.x - 58.56) < 0.1 && Math.Abs(transform.position.y - (-12.11)) < 0.01;
     }
 
     private void Awake()
@@ -89,6 +106,18 @@ public class PlayerControllerLevel1 : MonoBehaviour
         {
             score += 1;
             Debug.Log($"Score {score}");
+            other.gameObject.SetActive(false);
+        }
+
+        if (other.CompareTag("Heart"))
+        {
+            _lives++;
+            other.gameObject.SetActive(false);
+        }
+
+        if (other.CompareTag("Key"))
+        {
+            _foundKey = true;
             other.gameObject.SetActive(false);
         }
 
@@ -127,5 +156,13 @@ public class PlayerControllerLevel1 : MonoBehaviour
     private void YouWin()
     {
         youWinPanel.SetActive(true);
+    }
+
+    private void KeyNotFoundPanel()
+    {
+        keyPanel.SetActive(true);
+        Task
+            .Delay(new TimeSpan(0, 0, 5))
+            .ContinueWith(o => keyPanel.SetActive(false));
     }
 }
