@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Coin
+  - Enemy
+  - Key
+  - Heart
   layers:
   - Default
   - TransparentFX
@@ -13,9 +17,9 @@ TagManager:
   - UI
   - 
   - 
+  - BackGround
   - Ground
-  - 
-  - 
+  - Misc
   - 
   - 
   - 
@@ -40,4 +44,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 2531424625
+    locked: 0
+  - name: Ground
+    uniqueID: 1520839601
+    locked: 0
+  - name: Misc
+    uniqueID: 1984228785
     locked: 0
