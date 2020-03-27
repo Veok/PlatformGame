@@ -10,7 +10,6 @@ public class PlayerControllerLevel1 : MonoBehaviour
     public new Rigidbody2D rigidbody2D;
     public LayerMask groundLayer;
     public Animator animator;
-    public int score;
     public GameObject youWinPanel;
     public GameObject keyPanel;
 
@@ -104,9 +103,8 @@ public class PlayerControllerLevel1 : MonoBehaviour
     {
         if (other.CompareTag("Coin"))
         {
-            score += 1;
-            Debug.Log($"Score {score}");
             other.gameObject.SetActive(false);
+            GameManager.instance.AddCoins();
         }
 
         if (other.CompareTag("Heart"))
@@ -118,25 +116,17 @@ public class PlayerControllerLevel1 : MonoBehaviour
         if (other.CompareTag("Key"))
         {
             _foundKey = true;
+            GameManager.instance.FoundKey();
             other.gameObject.SetActive(false);
         }
 
         if (other.CompareTag("Enemy"))
         {
-            if (other.gameObject.transform.position.y + _killOffset < transform.position.y)
-            {
-                score += 10;
-                Debug.Log($"Enemy killed. Score: {score}");
-            }
-            else
-            {
-                _lives--;
-                if (_lives == 0)
-                {
-                    Debug.Log("GameOver");
-                    transform.position = _startPosition;
-                }
-            }
+            _lives--;
+            if (_lives != 0) return;
+            
+            Debug.Log("GameOver");
+            transform.position = _startPosition;
         }
     }
 
@@ -158,11 +148,10 @@ public class PlayerControllerLevel1 : MonoBehaviour
         youWinPanel.SetActive(true);
     }
 
-    private void KeyNotFoundPanel()
+    private async void KeyNotFoundPanel()
     {
         keyPanel.SetActive(true);
-        Task
-            .Delay(new TimeSpan(0, 0, 5))
-            .ContinueWith(o => keyPanel.SetActive(false));
+        await Task.Delay(1000);
+        keyPanel.SetActive(false);
     }
 }
