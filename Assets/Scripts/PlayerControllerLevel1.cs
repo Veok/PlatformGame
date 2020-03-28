@@ -12,6 +12,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
     public Animator animator;
     public GameObject youWinPanel;
     public GameObject keyPanel;
+    public GameObject startGamePanel;
 
     private bool _isWalking;
     private bool _isFacingRight;
@@ -27,6 +28,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
         rigidbody2D.freezeRotation = true;
         youWinPanel.SetActive(false);
         keyPanel.SetActive(false);
+        startGamePanel.SetActive(true);
     }
 
     // Update is called once per frame
@@ -34,6 +36,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
     {
         if (GameManager.instance.currentGameState == GameState.GS_GAME)
         {
+            startGamePanel.SetActive(false);
             if (Input.GetKey(KeyCode.Space) || Input.GetMouseButtonDown(0))
             {
                 Jump();
@@ -110,6 +113,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
         if (other.CompareTag("Heart"))
         {
             _lives++;
+            GameManager.instance.AddHeart();
             other.gameObject.SetActive(false);
         }
 
@@ -120,13 +124,16 @@ public class PlayerControllerLevel1 : MonoBehaviour
             other.gameObject.SetActive(false);
         }
 
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy") && IsGrounded())
         {
             _lives--;
-            if (_lives != 0) return;
-            
-            Debug.Log("GameOver");
-            transform.position = _startPosition;
+            GameManager.instance.RemoveHeart();
+            if (_lives == 0)
+            {
+                Debug.Log("GameOver");
+                transform.position = _startPosition;
+                GameManager.instance.GameOver();
+            }
         }
     }
 
@@ -146,6 +153,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
     private void YouWin()
     {
         youWinPanel.SetActive(true);
+        GameManager.instance.LevelCompleted();
     }
 
     private async void KeyNotFoundPanel()

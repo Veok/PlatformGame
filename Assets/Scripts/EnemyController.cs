@@ -88,6 +88,7 @@ public class EnemyController : MonoBehaviour
             if (other.gameObject.transform.position.y > transform.position.y + _killOffset)
             {
                 Debug.Log("Enemy is dead");
+                GameManager.instance.EnemyKilledCounter();
                 animator.SetBool("isDead", true);
                 StartCoroutine(KillOnAnimationEnd());
             }
