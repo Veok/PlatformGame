@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/save.unity
     guid: 4307e9321502dd945a7dc0feaba386ed
+  - enabled: 1
+    path: Assets/save2.unity
+    guid: 88ef2c4b960f55f40b25a13559b5787d
   m_configObjects: {}

@@ -20,7 +20,10 @@ public class MainMenu : MonoBehaviour
     {
         StartCoroutine(StartGame("save"));
     }
-
+    public void OnLevel2ButtonPressed()
+    {
+        StartCoroutine(StartGame("save2"));
+    }
     public void ExitGame()
     {
 #if UNITY_EDITOR

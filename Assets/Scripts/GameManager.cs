@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public float Timer;
     public Text TimerText;
     public Canvas PauseMenuCanvas;
+    public Canvas LevelCompledtedCanvas;
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour
         currentGameState = newGameState;
         PauseMenuCanvas.enabled = currentGameState == GameState.GS_PAUSEMENU;
         InGameCanvas.enabled = (newGameState == GameState.GS_GAME);
+        LevelCompledtedCanvas.enabled = currentGameState == GameState.GS_LEVELCOMPLETED;
     }
 
     public void InGame()
@@ -62,6 +64,10 @@ public class GameManager : MonoBehaviour
         SetGameState(GameState.GS_GAME_OVER);
     }
 
+    public void OnNextLevelButtonClicked()
+    {
+        SceneManager.LoadScene("save2");
+    }
     public void PauseMenu()
     {
         SetGameState(GameState.GS_PAUSEMENU);

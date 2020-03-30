@@ -63,23 +63,23 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void MoveLeft()
-    {
-        if (_rigidbody.velocity.x > moveSpeed)
+        private void MoveLeft()
         {
-            _rigidbody.velocity = new Vector2(-moveSpeed, _rigidbody.velocity.y);
-            _rigidbody.AddForce(Vector2.left * 0.6F, ForceMode2D.Impulse);
+            if (_rigidbody.velocity.x > moveSpeed)
+            {
+                _rigidbody.velocity = new Vector2(-moveSpeed, _rigidbody.velocity.y);
+                _rigidbody.AddForce(Vector2.left * 0.6F, ForceMode2D.Impulse);
+            }
         }
-    }
 
-    private void MoveRight()
-    {
-        if (_rigidbody.velocity.x < moveSpeed)
+        private void MoveRight()
         {
-            _rigidbody.velocity = new Vector2(moveSpeed, _rigidbody.velocity.y);
-            _rigidbody.AddForce(Vector2.right * 0.6F, ForceMode2D.Impulse);
+            if (_rigidbody.velocity.x < moveSpeed)
+            {
+                _rigidbody.velocity = new Vector2(moveSpeed, _rigidbody.velocity.y);
+                _rigidbody.AddForce(Vector2.right * 0.6F, ForceMode2D.Impulse);
+            }
         }
-    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {

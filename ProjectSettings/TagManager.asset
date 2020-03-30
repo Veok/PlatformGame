@@ -8,6 +8,8 @@ TagManager:
   - Enemy
   - Key
   - Heart
+  - MovingPlatform
+  - FallColider
   layers:
   - Default
   - TransparentFX

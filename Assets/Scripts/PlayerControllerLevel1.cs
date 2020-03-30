@@ -135,6 +135,11 @@ public class PlayerControllerLevel1 : MonoBehaviour
                 GameManager.instance.GameOver();
             }
         }
+
+        if (other.CompareTag("FallColider"))
+        {
+            GameManager.instance.GameOver();
+        }
     }
 
     private void Jump()
