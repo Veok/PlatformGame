@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,11 +21,14 @@ public class GameManager : MonoBehaviour
     private int Hearts = 3;
     public float Timer;
     public Text TimerText;
+    public Canvas PauseMenuCanvas;
 
     // Start is called before the first frame update
     void Start()
     {
-        PauseMenu();
+        InGame();
+        CoinsText.text = "0";
+        EnemyKilledText.text = "0";
     }
 
     void Awake()
@@ -39,6 +43,7 @@ public class GameManager : MonoBehaviour
     void SetGameState(GameState newGameState)
     {
         currentGameState = newGameState;
+        PauseMenuCanvas.enabled = currentGameState == GameState.GS_PAUSEMENU;
         InGameCanvas.enabled = (newGameState == GameState.GS_GAME);
     }
 
@@ -60,6 +65,21 @@ public class GameManager : MonoBehaviour
     public void PauseMenu()
     {
         SetGameState(GameState.GS_PAUSEMENU);
+    }
+
+    public void OnResumeButtonClicked()
+    {
+        InGame();
+    }
+
+    public void OnRestartButtonClicked()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void OnExitButtonClicked()
+    {
+        SceneManager.LoadScene("menu");
     }
 
     public void LevelCompleted()
@@ -93,14 +113,14 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (instance.currentGameState == GameState.GS_PAUSEMENU)
+        if (Input.GetKey(KeyCode.Escape) && instance.currentGameState == GameState.GS_PAUSEMENU)
         {
-            if (Input.GetKey(KeyCode.S))
-            {
-                instance.InGame();
-                CoinsText.text = "0";
-                EnemyKilledText.text = "0";
-            }
+            InGame();
+        }
+
+        if (Input.GetKey(KeyCode.Escape) && instance.currentGameState == GameState.GS_GAME)
+        {
+            PauseMenu();
         }
 
         if (instance.currentGameState == GameState.GS_GAME)
@@ -118,5 +138,6 @@ public enum GameState
     GS_PAUSEMENU,
     GS_GAME,
     GS_LEVELCOMPLETED,
-    GS_GAME_OVER
+    GS_GAME_OVER,
+    GS_START
 }
