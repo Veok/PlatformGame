@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public Text TimerText;
     public Canvas PauseMenuCanvas;
     public Canvas LevelCompledtedCanvas;
+    public Canvas GameOverCanvas;
+    public Text Score;
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +49,7 @@ public class GameManager : MonoBehaviour
         PauseMenuCanvas.enabled = currentGameState == GameState.GS_PAUSEMENU;
         InGameCanvas.enabled = (newGameState == GameState.GS_GAME);
         LevelCompledtedCanvas.enabled = currentGameState == GameState.GS_LEVELCOMPLETED;
+        GameOverCanvas.enabled = currentGameState == GameState.GS_GAME_OVER;
     }
 
     public void InGame()
@@ -68,6 +71,7 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("save2");
     }
+
     public void PauseMenu()
     {
         SetGameState(GameState.GS_PAUSEMENU);
@@ -90,6 +94,7 @@ public class GameManager : MonoBehaviour
 
     public void LevelCompleted()
     {
+        Score.text = $"Your Score : {(int) ((_coins + _enemiesKilled + Hearts) * 1000) / Timer}";
         SetGameState(GameState.GS_LEVELCOMPLETED);
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -79,6 +80,11 @@ public class PlayerControllerLevel1 : MonoBehaviour
             animator.SetBool("isGrounded", IsGrounded());
             animator.SetBool("isWalking", _isWalking);
         }
+
+        if (_lives < 0)
+        {
+            GameManager.instance.GameOver();
+        }
     }
 
 
@@ -138,6 +144,7 @@ public class PlayerControllerLevel1 : MonoBehaviour
 
         if (other.CompareTag("FallColider"))
         {
+            transform.position = _startPosition;
             GameManager.instance.GameOver();
         }
     }
